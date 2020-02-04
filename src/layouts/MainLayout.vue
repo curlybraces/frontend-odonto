@@ -37,7 +37,8 @@
           active-class="my-menu-link"
         >
           <q-item-section avatar>
-            <q-icon :name="link.icon" />
+            <q-icon v-if="link.icon" :name="link.icon" />
+            <q-icon v-else :name="'img:statics/dentist-icons/icons/'+link.svg+'.svg'" />
           </q-item-section>
           <q-item-section>{{link.title}}</q-item-section>
         </q-item>
@@ -68,55 +69,55 @@ export default {
         {
           title: 'Clinics',
           caption: '',
-          icon: 'home',
+          svg: 'dentist-chair',
           link: '/clinics/'
         },
         {
           title: 'Consults',
           caption: '',
-          icon: 'fas fa-tooth',
+          svg: 'dental-care',
           link: '/consults/'
         },
         {
           title: 'Dentists',
           caption: '',
-          icon: 'fa fa-tooth',
+          svg: 'dentist',
           link: '/dentists/'
         },
         {
           title: 'Dentists Procedures',
           caption: '',
-          icon: 'fa fa-tooth',
+          svg: 'dental-care',
           link: '/dentists-procedures/'
         },
         {
           title: 'Patients',
           caption: '',
-          icon: 'fa fa-user',
+          svg: 'tooth-add',
           link: '/patients/'
         },
         {
           title: 'Procedures Performed',
           caption: '',
-          icon: 'fa fa-users',
+          svg: 'toothbrush',
           link: '/procedures-performeds/'
         },
         {
           title: 'Schedules',
           caption: '',
-          icon: 'fa fa-calendar-alt',
+          svg: 'tooth-inspect',
           link: '/schedules/'
         },
         {
           title: 'Specialties',
           caption: '',
-          icon: 'fa fa-tooth',
+          svg: 'toothbrush',
           link: '/specialties/'
         },
         {
           title: 'Type users',
           caption: '',
-          icon: 'fa fa-users',
+          icon: 'fa fa-user',
           link: '/type-users/'
         }
       ]
