@@ -27,11 +27,20 @@
     >
       <q-list>
         <q-item-label header class="text-grey-8">Essential Links</q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
+        <q-item v-for="link in essentialLinks"
           :key="link.title"
-          v-bind="link"
-        />
+          clickable
+          v-ripple
+          @click="active == link.title"
+          :active="link.title === active"
+          :to="link.link"
+          active-class="my-menu-link"
+        >
+          <q-item-section avatar>
+            <q-icon :name="link.icon" />
+          </q-item-section>
+          <q-item-section>{{link.title}}</q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -42,18 +51,19 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink'
+// import EssentialLink from 'components/EssentialLink'
 
 export default {
   name: 'MainLayout',
 
-  components: {
-    EssentialLink
-  },
+  // components: {
+  //   EssentialLink
+  // },
 
   data () {
     return {
       leftDrawerOpen: false,
+      active: '',
       essentialLinks: [
         {
           title: 'Clinics',
@@ -77,7 +87,7 @@ export default {
           title: 'Dentists Procedures',
           caption: '',
           icon: 'fa fa-tooth',
-          link: '/dentist-procedures/'
+          link: '/dentists-procedures/'
         },
         {
           title: 'Patients',

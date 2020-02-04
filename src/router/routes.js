@@ -36,7 +36,7 @@ const routes = [
     ]
   },
   {
-    path: '/patient/',
+    path: '/patients/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/patient/Index.vue') }
@@ -61,6 +61,13 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/specialtie/Index.vue') }
+    ]
+  },
+  {
+    path: '/type-users/',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/type-user/Index.vue') }
     ]
   }
 ]
