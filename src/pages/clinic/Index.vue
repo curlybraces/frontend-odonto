@@ -7,9 +7,8 @@
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
-      <q-card class="my-card">
         <q-table
-          title="Treats"
+          title="Clinics"
           :data="registers"
           :columns="columns"
           row-key="id"
@@ -17,7 +16,6 @@
           :loading="loading"
           >
           <template v-slot:top>
-            <q-btn color="primary" :disable="loading" label="Add register" @click="addRow" />
             <q-space />
             <q-input borderless dense debounce="300" color="primary" v-model="filter">
               <template v-slot:append>
@@ -32,6 +30,8 @@
             </q-td>
         </template>
         </q-table>
+      <q-card class="my-card">
+        <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/clinics/create" />
       </q-card>
     </div>
   </q-page>
@@ -56,14 +56,11 @@ export default {
           sortable: true
         },
         { name: 'name', label: 'Name', field: 'name' },
+        { name: 'number', label: 'Number', field: 'number' },
+        { name: 'complement', label: 'Complement', field: 'complement' },
         { name: 'actions', label: 'Actions', field: 'actions' }
       ],
-      registers: [
-        {
-          id: 1,
-          name: 'Frozen Yogurt'
-        }
-      ]
+      registers: []
     }
   },
   created () {
@@ -79,22 +76,21 @@ export default {
     deleteRow (props) {
       /**/
     },
-    loadData () {
+    async loadData () {
       this.loading = true
-      this.$axios.get('/api/clinics')
-        .then((response) => {
-          this.data.registers = response.data.obj
-          this.loading = false
+      try {
+        const response = await this.$axios.get('/api/clinics')
+        this.registers = response.data
+      } catch (e) {
+        console.error(e)
+        this.$q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Loading failed',
+          icon: 'report_problem'
         })
-        .catch((response) => {
-          this.$q.notify({
-            color: 'negative',
-            position: 'top',
-            message: 'Loading failed',
-            icon: 'report_problem'
-          })
-          this.loading = false
-        })
+      }
+      this.loading = false
     }
   }
 }

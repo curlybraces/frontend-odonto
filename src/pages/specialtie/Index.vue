@@ -79,22 +79,21 @@ export default {
     deleteRow (props) {
       /**/
     },
-    loadData () {
+    async loadData () {
       this.loading = true
-      this.$axios.get('/api/specialtie')
-        .then((response) => {
-          this.data.registers = response.data.obj
-          this.loading = false
+      try {
+        const response = await this.$axios.get('/api/specialties')
+        this.registers = response.data
+      } catch (e) {
+        console.error(e)
+        this.$q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Loading failed',
+          icon: 'report_problem'
         })
-        .catch((response) => {
-          this.$q.notify({
-            color: 'negative',
-            position: 'top',
-            message: 'Loading failed',
-            icon: 'report_problem'
-          })
-          this.loading = false
-        })
+      }
+      this.loading = false
     }
   }
 }

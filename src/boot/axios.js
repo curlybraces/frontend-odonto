@@ -5,10 +5,10 @@ Vue.prototype.$axios = axios
 export default ({ Vue }) => {
     Vue.prototype.$axios = axios.create({
         baseURL: 'http://localhost:8002',
-        withCredentials: true
+        withCredentials: false
         // timeout: 1000,
         // headers: {
-        //   'header': 'value'
+        //     'Content-Type': 'application/json'
         // }
     })
 }

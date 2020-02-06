@@ -58,12 +58,7 @@ export default {
         { name: 'name', label: 'Name', field: 'name' },
         { name: 'actions', label: 'Actions', field: 'actions' }
       ],
-      registers: [
-        {
-          id: 1,
-          name: 'Frozen Yogurt'
-        }
-      ]
+      registers: []
     }
   },
   created () {
@@ -79,22 +74,21 @@ export default {
     deleteRow (props) {
       /**/
     },
-    loadData () {
+    async loadData () {
       this.loading = true
-      this.$axios.get('/api/dentists-procedures')
-        .then((response) => {
-          this.data.registers = response.data.obj
-          this.loading = false
+      try {
+        const response = await this.$axios.get('/api/dentists-procedures')
+        this.registers = response.data
+      } catch (e) {
+        console.error(e)
+        this.$q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Loading failed',
+          icon: 'report_problem'
         })
-        .catch((response) => {
-          this.$q.notify({
-            color: 'negative',
-            position: 'top',
-            message: 'Loading failed',
-            icon: 'report_problem'
-          })
-          this.loading = false
-        })
+      }
+      this.loading = false
     }
   }
 }

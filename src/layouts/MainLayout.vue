@@ -117,7 +117,7 @@ export default {
         {
           title: 'Type users',
           caption: '',
-          icon: 'fa fa-user',
+          icon: 'supervisor_account',
           link: '/type-users/'
         }
       ]

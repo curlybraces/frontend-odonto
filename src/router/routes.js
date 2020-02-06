@@ -8,10 +8,25 @@ const routes = [
     ]
   },
   {
+    path: '/login',
+    component: () => import('pages/auth/Login.vue')
+  },
+  {
+    path: '/register',
+    component: () => import('pages/auth/Register.vue')
+  },
+  {
     path: '/clinics/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/clinic/Index.vue') }
+    ]
+  },
+  {
+    path: '/clinics/create',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/clinic/Form.vue') }
     ]
   },
   {
@@ -79,5 +94,18 @@ if (process.env.MODE !== 'ssr') {
     component: () => import('pages/Error404.vue')
   })
 }
+
+// routes.beforeEach((to, from, next) => {
+//   // redirect to login page if not logged in and trying to access a restricted page
+//   const publicPages = ['/login']
+//   const authRequired = !publicPages.includes(to.path)
+//   const loggedIn = localStorage.getItem('user')
+
+//   if (authRequired && !loggedIn) {
+//     return next('/login')
+//   }
+
+//   next()
+// })
 
 export default routes
