@@ -25,8 +25,8 @@
           </template>
           <template v-slot:body-cell-actions="props">
             <q-td :props="props">
-              <q-btn dense round flat color="grey" @click="editRow(props)" icon="edit"></q-btn>
-              <q-btn dense round flat color="grey" @click="deleteRow(props)" icon="delete"></q-btn>
+              <q-btn dense round flat color="grey" @click="editRow(props.row)" icon="edit"></q-btn>
+              <q-btn dense round flat color="grey" @click="deleteRow(props.row)" icon="delete"></q-btn>
             </q-td>
         </template>
         </q-table>
@@ -38,10 +38,13 @@
 </template>
 
 <script>
+import transations from '../../utils/transations'
 export default {
   name: 'PageIndexClinic',
+  mixins: [transations],
   data () {
     return {
+      module: 'clinics',
       loading: false,
       filter: '',
       rowCount: 10,
@@ -67,19 +70,28 @@ export default {
     this.loadData()
   },
   methods: {
-    addRow () {
-      /**/
+    editRow (row) {
+      this.$router.push(`${this.module}/edit/${row.id}`)
     },
-    editRow (props) {
-      /**/
-    },
-    deleteRow (props) {
-      /**/
+    async deleteRow (row) {
+      try {
+        const response = await this.$axios.delete(`/api/${this.module}/${row.id}`)
+        this.transation('delete', response.data.success)
+        this.loadData()
+      } catch (e) {
+        console.error(e)
+        this.$q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Loading failed',
+          icon: 'report_problem'
+        })
+      }
     },
     async loadData () {
       this.loading = true
       try {
-        const response = await this.$axios.get('/api/clinics')
+        const response = await this.$axios.get(`/api/${this.module}`)
         this.registers = response.data
       } catch (e) {
         console.error(e)

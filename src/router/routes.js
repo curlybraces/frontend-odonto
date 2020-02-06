@@ -30,6 +30,13 @@ const routes = [
     ]
   },
   {
+    path: '/clinics/edit/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/clinic/Form.vue') }
+    ]
+  },
+  {
     path: '/consults/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
