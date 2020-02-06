@@ -19,8 +19,10 @@
 </template>
 
 <script>
+import transations from '../../utils/transations'
 export default {
   name: 'PageFormClinic',
+  mixins: [transations],
   data () {
     return {
       register: {}
@@ -31,14 +33,10 @@ export default {
       try {
         const response = await this.$axios.post('/api/clinics', this.register)
         console.log(response.data)
+        this.transation('create', true)
       } catch (e) {
         console.error(e)
-        this.$q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Not Works',
-          icon: 'report_problem'
-        })
+        this.transation('create', false)
       }
     },
     edit (props) {
