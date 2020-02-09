@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     editRow (row) {
-      this.$router.push(`${this.module}/edit/${row.id}`)
+      this.$router.push(`/${this.module}/edit/${row.id}`)
     },
     async deleteRow (row) {
       try {

@@ -14,6 +14,23 @@
         <q-input v-model="register.number" label="Number" />
         <q-input v-model="register.complement" label="Complement" />
         <template v-if="register.id">
+          <q-select
+            filled
+            v-model="dentistsMember"
+            multiple
+            :options="dentists"
+            option-value="id"
+            option-label="name"
+            map-options
+            use-chips
+            use-input
+            stack-label
+            label="Member dentists"
+            @add="updateDentist"
+            @remove="updateDentist"
+          />
+        </template>
+        <template v-if="register.id">
           <q-btn :disable="requireds" color="green-6" class="full-width" label="Edit register" @click="edit">
             <q-tooltip>
               {{msgRequired}}
@@ -39,7 +56,9 @@ export default {
   data () {
     return {
       module: 'clinics',
-      register: {}
+      register: {},
+      dentists: [],
+      dentistsMember: []
     }
   },
   computed: {
@@ -52,13 +71,48 @@ export default {
     }
   },
   created () {
-    if (this.$router.currentRoute.params.id) this.getRegister(this.$router.currentRoute.params.id)
+    const id = this.$router.currentRoute.params.id
+    if (id) {
+      this.getRegister(id)
+      this.membersDentists(id)
+      this.getDentists()
+    }
   },
   methods: {
+    reload(id) {
+      this.getRegister(id)
+      this.membersDentists(id)
+      this.getDentists()
+    },
     async getRegister(id) {
       try {
         const response = await this.$axios.get(`/api/${this.module}/${id}`)
         if (response) this.register = response.data
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async getDentists() {
+      try {
+        const response = await this.$axios.get(`/api/dentists`)
+        if (response) this.dentists = response.data
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async membersDentists(id) {
+      try {
+        const response = await this.$axios.get(`/api/${this.module}/${id}/dentists`)
+        if (response) this.dentistsMember = response.data
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async updateDentist() {
+      const id = this.register.id
+      try {
+        const response = await this.$axios.post(`/api/${this.module}/${id}/dentists`, this.dentistsMember)
+        this.transation('edit', response.data.success)
       } catch (e) {
         console.error(e)
       }
@@ -70,7 +124,7 @@ export default {
         if (response) {
           const id = response.data.obj.id
           this.$router.push(`edit/${id}`)
-          this.getRegister(id)
+          this.reload(id)
         }
       } catch (e) {
         console.error(e)
