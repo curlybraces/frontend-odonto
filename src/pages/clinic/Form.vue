@@ -44,15 +44,21 @@
             </q-tooltip>
           </q-btn>
         </template>
+        <q-separator />
+        <Phone v-if="register.id" :id_register="register.id" :module="module"/>
     </div>
   </q-page>
 </template>
 
 <script>
 import transations from '../../utils/transations'
+import Phone from 'components/Phone'
 export default {
   name: 'PageFormClinic',
   mixins: [transations],
+  components: {
+    Phone
+  },
   data () {
     return {
       module: 'clinics',

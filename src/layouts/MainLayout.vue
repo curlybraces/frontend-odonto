@@ -75,7 +75,7 @@ export default {
         {
           title: 'Consults',
           caption: '',
-          svg: 'dental-care',
+          svg: 'tooth-inspect',
           link: '/consults/'
         },
         {
@@ -103,22 +103,10 @@ export default {
           link: '/procedures-performeds/'
         },
         {
-          title: 'Schedules',
-          caption: '',
-          svg: 'tooth-inspect',
-          link: '/schedules/'
-        },
-        {
           title: 'Specialties',
           caption: '',
           svg: 'toothbrush',
           link: '/specialties/'
-        },
-        {
-          title: 'Type users',
-          caption: '',
-          icon: 'supervisor_account',
-          link: '/type-users/'
         }
       ]
     }

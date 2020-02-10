@@ -3,31 +3,25 @@
     <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el icon="home" to="/" />
-        <q-breadcrumbs-el to="/clinics" label="Clinics" />
-        <q-breadcrumbs-el v-if="register.id" label="Clinics Edit" />
-        <q-breadcrumbs-el v-else label="Clinics Create" />
+        <q-breadcrumbs-el to="/patients" label="Patients" />
+        <q-breadcrumbs-el v-if="register.id" label="Patients Edit" />
+        <q-breadcrumbs-el v-else label="Patients Create" />
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
         <q-input v-model="register.name" label="Name" :rules="[val => !!val || 'Field is required']"/>
-        <q-input v-model="register.localization" label="Localization" :rules="[val => !!val || 'Field is required']"/>
-        <q-input v-model="register.number" label="Number" />
-        <q-input v-model="register.complement" label="Complement" />
-        <template v-if="register.id">
+        <q-select v-model="register.teething_type" :options="teething_type" label="Teething type" emit-value map-options/>
+        <q-input v-model="register.age" label="Age" type="number"/>
+        <q-select v-model="register.is_holder" :options="is_holder" label="Is Holder" emit-value map-options/>
+        <template v-if="!register.is_holder">
           <q-select
-            filled
-            v-model="dentistsMember"
-            multiple
-            :options="dentists"
+            v-model="register.patient_id"
+            :options="patients"
             option-value="id"
             option-label="name"
             map-options
-            use-chips
-            use-input
-            stack-label
-            label="Member dentists"
-            @add="updateDentist"
-            @remove="updateDentist"
+            label="Patients"
+            emit-value
           />
         </template>
         <template v-if="register.id">
@@ -44,30 +38,38 @@
             </q-tooltip>
           </q-btn>
         </template>
+        <q-separator />
+        <Phone v-if="register.id" :id_register="register.id" :module="module"/>
     </div>
   </q-page>
 </template>
 
 <script>
 import transations from '../../utils/transations'
+import Phone from 'components/Phone'
+
 export default {
   name: 'PageFormClinic',
   mixins: [transations],
+  components: {
+    Phone
+  },
   data () {
     return {
-      module: 'clinics',
+      module: 'patients',
       register: {},
-      dentists: [],
-      dentistsMember: []
+      patients: [],
+      teething_type: [{ label: 'Adult', value: 0 }, { label: 'Child', value: 1 }],
+      is_holder: [{ label: 'No', value: 0 }, { label: 'Yes', value: 1 }]
     }
   },
   computed: {
     requireds() {
-      if (this.register.name && this.register.localization) return false
+      if (this.register.name && this.register.age) return false
       return true
     },
     msgRequired() {
-        return 'to submit the fields NAME, LOCALIZATION must be completed'
+        return 'to submit the fields NAME, AGE must be completed'
     }
   },
   created () {
@@ -77,8 +79,7 @@ export default {
   methods: {
     datasToEdit(id) {
       this.getRegister(id)
-      this.membersDentists(id)
-      this.getDentists()
+      this.getPatients()
     },
     async getRegister(id) {
       try {
@@ -88,27 +89,10 @@ export default {
         console.error(e)
       }
     },
-    async getDentists() {
+    async getPatients() {
       try {
-        const response = await this.$axios.get(`/api/dentists`)
-        if (response) this.dentists = response.data
-      } catch (e) {
-        console.error(e)
-      }
-    },
-    async membersDentists(id) {
-      try {
-        const response = await this.$axios.get(`/api/${this.module}/${id}/dentists`)
-        if (response) this.dentistsMember = response.data
-      } catch (e) {
-        console.error(e)
-      }
-    },
-    async updateDentist() {
-      const id = this.register.id
-      try {
-        const response = await this.$axios.post(`/api/${this.module}/${id}/dentists`, this.dentistsMember)
-        this.transation('edit', response.data.success)
+        const response = await this.$axios.get(`/api/patients`)
+        if (response) this.patients = response.data
       } catch (e) {
         console.error(e)
       }

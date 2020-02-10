@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <img alt="Quasar logo" src="~assets/quasar-logo-full.svg">
+    <q-icon alt="Odonto clinic logo" name="img:statics/dentist-icons/icons/dentist-chair.svg" size="15rem"/>
   </q-page>
 </template>
 

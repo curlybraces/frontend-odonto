@@ -9,51 +9,57 @@
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
-        <q-input v-model="register.name" label="Name" :rules="[val => !!val || 'Field is required']"/>
-        <q-input v-model="register.register_number" label="Register Number" :rules="[val => !!val || 'Field is required']"/>
-        <template v-if="register.id">
-          <q-select
-            filled
-            v-model="clinicsMember"
-            multiple
-            :options="clinics"
-            option-value="id"
-            option-label="name"
-            map-options
-            use-chips
-            use-input
-            stack-label
-            label="Member clinics"
-            @add="updateClinic"
-            @remove="updateClinic"
-          />
-        </template>
-        <template v-if="register.id">
-          <q-btn :disable="requireds" color="green-6" class="full-width" label="Edit register" @click="edit">
-            <q-tooltip>
-              {{msgRequired}}
-            </q-tooltip>
-          </q-btn>
-        </template>
-        <template v-else>
-          <q-btn color="green-6" :disable="requireds" class="full-width" label="Add register" @click="create">
-            <q-tooltip>
-              {{msgRequired}}
-            </q-tooltip>
-          </q-btn>
-        </template>
+      <q-input v-model="register.name" label="Name" :rules="[val => !!val || 'Field is required']"/>
+      <q-input v-model="register.register_number" label="Register Number" :rules="[val => !!val || 'Field is required']"/>
+      <template v-if="register.id">
+        <q-select
+          filled
+          v-model="clinicsMember"
+          multiple
+          :options="clinics"
+          option-value="id"
+          option-label="name"
+          map-options
+          use-chips
+          use-input
+          stack-label
+          label="Member clinics"
+          @add="updateClinic"
+          @remove="updateClinic"
+        />
+      </template>
+      <template v-if="register.id">
+        <q-btn :disable="requireds" color="green-6" class="full-width" label="Edit register" @click="edit">
+          <q-tooltip>
+            {{msgRequired}}
+          </q-tooltip>
+        </q-btn>
+      </template>
+      <template v-else>
+        <q-btn color="green-6" :disable="requireds" class="full-width" label="Add register" @click="create">
+          <q-tooltip>
+            {{msgRequired}}
+          </q-tooltip>
+        </q-btn>
+      </template>
+      <q-separator />
+      <Phone v-if="register.id" :id_register="register.id" :module="module"/>
     </div>
   </q-page>
 </template>
 
 <script>
 import transations from '../../utils/transations'
+import Phone from 'components/Phone'
 export default {
   name: 'PageFormClinic',
   mixins: [transations],
+  components: {
+    Phone
+  },
   data () {
     return {
-      module: 'clinics',
+      module: 'dentists',
       register: {},
       clinics: [],
       clinicsMember: []

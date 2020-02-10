@@ -3,33 +3,47 @@
     <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el icon="home" to="/" />
-        <q-breadcrumbs-el label="Clinics" />
+        <q-breadcrumbs-el label="Patients" />
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
-        <q-table
-          title="Clinics"
-          :data="registers"
-          :columns="columns"
-          row-key="id"
-          :filter="filter"
-          :loading="loading"
-          >
-          <template v-slot:top>
-            <q-space />
-            <q-input borderless dense debounce="300" color="primary" v-model="filter">
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </template>
-          <template v-slot:body-cell-actions="props">
-            <q-td :props="props">
+      <q-table
+        title="Patients"
+        :data="registers"
+        :columns="columns"
+        row-key="id"
+        :filter="filter"
+        :loading="loading"
+        >
+        <template v-slot:top>
+          <q-space />
+          <q-input borderless dense debounce="300" color="primary" v-model="filter">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td key="name" :props="props">
+              {{ props.row.name }}
+            </q-td>
+            <q-td key="teething_type" :props="props">
+              {{ props.row.teething_type }}
+            </q-td>
+            <q-td key="age" :props="props">
+              {{ props.row.age }}
+            </q-td>
+            <q-td key="is_holder" :props="props">
+              {{ props.row.is_holder | holder }}
+            </q-td>
+            <q-td key="actions" :props="props">
               <q-btn dense round flat color="grey" @click="editRow(props.row)" icon="edit"></q-btn>
               <q-btn dense round flat color="grey" @click="deleteRow(props.row)" icon="delete"></q-btn>
             </q-td>
+          </q-tr>
         </template>
-        </q-table>
+      </q-table>
       <q-card class="my-card">
         <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/clinics/create" />
       </q-card>
@@ -40,27 +54,33 @@
 <script>
 import transations from '../../utils/transations'
 export default {
-  name: 'PageIndexClinic',
+  name: 'PageIndexPatient',
   mixins: [transations],
+  filters: {
+    holder: function (value) {
+      if (!value) return 'No'
+      return 'Yes'
+    }
+  },
   data () {
     return {
-      module: 'clinics',
+      module: 'patients',
       loading: false,
       filter: '',
       rowCount: 10,
       columns: [
         {
-          name: 'localization',
+          name: 'name',
           required: true,
-          label: 'Localization',
+          label: 'Name',
           align: 'left',
           field: row => row.name,
           format: val => `${val}`,
           sortable: true
         },
-        { name: 'name', label: 'Name', field: 'name' },
-        { name: 'number', label: 'Number', field: 'number' },
-        { name: 'complement', label: 'Complement', field: 'complement' },
+        { name: 'teething_type', label: 'Teething type', field: 'teething_type' },
+        { name: 'age', label: 'Age', field: 'age' },
+        { name: 'is_holder', label: 'Is Holder', field: 'is_holder' },
         { name: 'actions', label: 'Actions', field: 'actions' }
       ],
       registers: []
