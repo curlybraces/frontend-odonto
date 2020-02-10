@@ -58,7 +58,7 @@ export default {
           format: val => `${val}`,
           sortable: true
         },
-        { name: 'name', label: 'Name', field: 'name' },
+        { name: 'name', label: 'Name', field: 'name', sortable: true },
         { name: 'number', label: 'Number', field: 'number' },
         { name: 'complement', label: 'Complement', field: 'complement' },
         { name: 'actions', label: 'Actions', field: 'actions' }

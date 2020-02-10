@@ -3,31 +3,29 @@
     <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el icon="home" to="/" />
-        <q-breadcrumbs-el to="/clinics" label="Clinics" />
-        <q-breadcrumbs-el v-if="register.id" label="Clinics Edit" />
-        <q-breadcrumbs-el v-else label="Clinics Create" />
+        <q-breadcrumbs-el to="/dentists" label="Dentists" />
+        <q-breadcrumbs-el v-if="register.id" label="Dentists Edit" />
+        <q-breadcrumbs-el v-else label="Dentists Create" />
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
         <q-input v-model="register.name" label="Name" :rules="[val => !!val || 'Field is required']"/>
-        <q-input v-model="register.localization" label="Localization" :rules="[val => !!val || 'Field is required']"/>
-        <q-input v-model="register.number" label="Number" />
-        <q-input v-model="register.complement" label="Complement" />
+        <q-input v-model="register.register_number" label="Register Number" :rules="[val => !!val || 'Field is required']"/>
         <template v-if="register.id">
           <q-select
             filled
-            v-model="dentistsMember"
+            v-model="clinicsMember"
             multiple
-            :options="dentists"
+            :options="clinics"
             option-value="id"
             option-label="name"
             map-options
             use-chips
             use-input
             stack-label
-            label="Member dentists"
-            @add="updateDentist"
-            @remove="updateDentist"
+            label="Member clinics"
+            @add="updateClinic"
+            @remove="updateClinic"
           />
         </template>
         <template v-if="register.id">
@@ -57,17 +55,17 @@ export default {
     return {
       module: 'clinics',
       register: {},
-      dentists: [],
-      dentistsMember: []
+      clinics: [],
+      clinicsMember: []
     }
   },
   computed: {
     requireds() {
-      if (this.register.name && this.register.localization) return false
+      if (this.register.name && this.register.register_number) return false
       return true
     },
     msgRequired() {
-        return 'to submit the fields NAME, LOCALIZATION must be completed'
+        return 'to submit the fields NAME, REGISTER NUMBER must be completed'
     }
   },
   created () {
@@ -77,8 +75,8 @@ export default {
   methods: {
     datasToEdit(id) {
       this.getRegister(id)
-      this.membersDentists(id)
-      this.getDentists()
+      this.membersClinics(id)
+      this.getClinics()
     },
     async getRegister(id) {
       try {
@@ -88,26 +86,26 @@ export default {
         console.error(e)
       }
     },
-    async getDentists() {
+    async getClinics() {
       try {
-        const response = await this.$axios.get(`/api/dentists`)
-        if (response) this.dentists = response.data
+        const response = await this.$axios.get(`/api/clinics`)
+        if (response) this.clinics = response.data
       } catch (e) {
         console.error(e)
       }
     },
-    async membersDentists(id) {
+    async membersClinics(id) {
       try {
-        const response = await this.$axios.get(`/api/${this.module}/${id}/dentists`)
-        if (response) this.dentistsMember = response.data
+        const response = await this.$axios.get(`/api/${this.module}/${id}/clinics`)
+        if (response) this.clinicsMember = response.data
       } catch (e) {
         console.error(e)
       }
     },
-    async updateDentist() {
+    async updateClinic() {
       const id = this.register.id
       try {
-        const response = await this.$axios.post(`/api/${this.module}/${id}/dentists`, this.dentistsMember)
+        const response = await this.$axios.post(`/api/${this.module}/${id}/clinics`, this.clinicsMember)
         this.transation('edit', response.data.success)
       } catch (e) {
         console.error(e)

@@ -44,10 +44,38 @@ const routes = [
     ]
   },
   {
+    path: '/consults/create',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/consult/Form.vue') }
+    ]
+  },
+  {
+    path: '/consults/edit/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/consult/Form.vue') }
+    ]
+  },
+  {
     path: '/dentists/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/dentist/Index.vue') }
+    ]
+  },
+  {
+    path: '/dentists/create',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/dentist/Form.vue') }
+    ]
+  },
+  {
+    path: '/dentists/edit/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/dentist/Form.vue') }
     ]
   },
   {
@@ -58,10 +86,38 @@ const routes = [
     ]
   },
   {
+    path: '/dentist-procedures/create',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/dentists-procedure/Form.vue') }
+    ]
+  },
+  {
+    path: '/dentist-procedures/edit/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/dentists-procedure/Form.vue') }
+    ]
+  },
+  {
     path: '/patients/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/patient/Index.vue') }
+    ]
+  },
+  {
+    path: '/patients/create',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/patient/Form.vue') }
+    ]
+  },
+  {
+    path: '/patients/edit/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/patient/Form.vue') }
     ]
   },
   {
@@ -72,10 +128,17 @@ const routes = [
     ]
   },
   {
-    path: '/schedules/',
+    path: '/procedures-performeds/create',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/schedule/Index.vue') }
+      { path: '', component: () => import('pages/procedures-performed/Form.vue') }
+    ]
+  },
+  {
+    path: '/procedures-performeds/edit/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/procedures-performed/Form.vue') }
     ]
   },
   {
@@ -86,10 +149,17 @@ const routes = [
     ]
   },
   {
-    path: '/type-users/',
+    path: '/specialties/create',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/type-user/Index.vue') }
+      { path: '', component: () => import('pages/specialtie/Form.vue') }
+    ]
+  },
+  {
+    path: '/specialties/edit/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/specialtie/Form.vue') }
     ]
   }
 ]
