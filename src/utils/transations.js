@@ -1,8 +1,8 @@
 // import specialUcwords from 'src/utils/specialUcwords'
 const transations = {
     methods: {
-        transation(type, happen) {
-            let config = this.configs(type, happen)
+        transation(type, happen, msg = '') {
+            let config = this.configs(type, happen, msg)
             const positionMsg = 'top-right'
             this.$q.notify({
                 color: config.color,
@@ -11,7 +11,8 @@ const transations = {
                 icon: config.icon
             })
         },
-        configs(type, happen) {
+        configs(type, happen, msg) {
+            if (type === 'error') return { message: msg, color: 'negative', icon: 'report_problem' }
             const word = this.words(type)
             if (happen) return { message: `${this.specialUcwords(word)} successfully`, color: 'positive', icon: 'done' }
             return { message: `Not ${word}`, color: 'negative', icon: 'report_problem' }

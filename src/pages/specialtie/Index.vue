@@ -3,12 +3,12 @@
     <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el icon="home" to="/" />
-        <q-breadcrumbs-el label="Clinics" />
+        <q-breadcrumbs-el label="Specialties" />
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
         <q-table
-          title="Clinics"
+          title="Specialties"
           :data="registers"
           :columns="columns"
           row-key="id"
@@ -31,7 +31,7 @@
         </template>
         </q-table>
       <q-card class="my-card">
-        <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/clinics/create" />
+        <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/specialties/create" />
       </q-card>
     </div>
   </q-page>
@@ -40,27 +40,23 @@
 <script>
 import transations from '../../utils/transations'
 export default {
-  name: 'PageIndexClinic',
+  name: 'PageIndexSpecialtie',
   mixins: [transations],
   data () {
     return {
-      module: 'clinics',
+      module: 'specialties',
       loading: false,
       filter: '',
       rowCount: 10,
       columns: [
         {
-          name: 'localization',
+          name: 'name_specialty',
           required: true,
-          label: 'Localization',
-          align: 'left',
-          field: row => row.name,
+          label: 'Specialty',
+          field: row => row.name_specialty,
           format: val => `${val}`,
           sortable: true
         },
-        { name: 'name', label: 'Name', field: 'name' },
-        { name: 'number', label: 'Number', field: 'number' },
-        { name: 'complement', label: 'Complement', field: 'complement' },
         { name: 'actions', label: 'Actions', field: 'actions' }
       ],
       registers: []
@@ -80,12 +76,7 @@ export default {
         this.loadData()
       } catch (e) {
         console.error(e)
-        this.$q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Loading failed',
-          icon: 'report_problem'
-        })
+        this.transation('error')
       }
     },
     async loadData () {
@@ -95,12 +86,7 @@ export default {
         this.registers = response.data
       } catch (e) {
         console.error(e)
-        this.$q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Loading failed',
-          icon: 'report_problem'
-        })
+        this.transation('error')
       }
       this.loading = false
     }

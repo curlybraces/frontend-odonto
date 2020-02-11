@@ -85,12 +85,6 @@ export default {
           link: '/dentists/'
         },
         {
-          title: 'Dentists Procedures',
-          caption: '',
-          svg: 'dental-care',
-          link: '/dentists-procedures/'
-        },
-        {
           title: 'Patients',
           caption: '',
           svg: 'tooth-add',
@@ -101,6 +95,12 @@ export default {
           caption: '',
           svg: 'toothbrush',
           link: '/procedures-performeds/'
+        },
+        {
+          title: 'Dentists Procedures',
+          caption: '',
+          svg: 'dental-care',
+          link: '/dentists-procedures/'
         },
         {
           title: 'Specialties',

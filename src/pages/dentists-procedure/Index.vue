@@ -3,12 +3,12 @@
     <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el icon="home" to="/" />
-        <q-breadcrumbs-el label="Clinics" />
+        <q-breadcrumbs-el label="DentistsProcedures" />
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
         <q-table
-          title="Clinics"
+          title="DentistsProcedures"
           :data="registers"
           :columns="columns"
           row-key="id"
@@ -31,7 +31,7 @@
         </template>
         </q-table>
       <q-card class="my-card">
-        <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/clinics/create" />
+        <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/dentists-procedures/create" />
       </q-card>
     </div>
   </q-page>
@@ -40,27 +40,24 @@
 <script>
 import transations from '../../utils/transations'
 export default {
-  name: 'PageIndexClinic',
+  name: 'PageIndexDentistProcedures',
   mixins: [transations],
   data () {
     return {
-      module: 'clinics',
+      module: 'dentists-procedures',
       loading: false,
       filter: '',
       rowCount: 10,
       columns: [
         {
-          name: 'localization',
+          name: 'name_procedure',
           required: true,
-          label: 'Localization',
-          align: 'left',
-          field: row => row.name,
+          label: 'Procedure',
+          field: row => row.name_procedure,
           format: val => `${val}`,
           sortable: true
         },
-        { name: 'name', label: 'Name', field: 'name' },
-        { name: 'number', label: 'Number', field: 'number' },
-        { name: 'complement', label: 'Complement', field: 'complement' },
+        { name: 'name_specialty', label: 'Specialty', field: 'name_specialty' },
         { name: 'actions', label: 'Actions', field: 'actions' }
       ],
       registers: []
