@@ -17,7 +17,7 @@
           >
           <template v-slot:top>
             <q-space />
-            <q-input borderless dense debounce="300" color="primary" v-model="filter">
+            <q-input borderless dense debounce="300" color="blue-5" v-model="filter">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
@@ -30,18 +30,20 @@
             </q-td>
         </template>
         </q-table>
-      <q-card class="my-card">
-        <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/clinics/create" />
-      </q-card>
+        <ToogleButton :loading="loading" to="/clinics/create"/>
     </div>
   </q-page>
 </template>
 
 <script>
 import transations from '../../utils/transations'
+import ToogleButton from 'components/ToogleButton'
 export default {
   name: 'PageIndexClinic',
   mixins: [transations],
+  components: {
+    ToogleButton
+  },
   data () {
     return {
       module: 'clinics',

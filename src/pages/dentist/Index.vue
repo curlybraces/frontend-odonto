@@ -30,18 +30,20 @@
             </q-td>
         </template>
         </q-table>
-      <q-card class="my-card">
-        <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/dentists/create" />
-      </q-card>
+        <ToogleButton :loading="loading" to="/dentists/create"/>
     </div>
   </q-page>
 </template>
 
 <script>
 import transations from '../../utils/transations'
+import ToogleButton from 'components/ToogleButton'
 export default {
   name: 'PageIndexDentist',
   mixins: [transations],
+  components: {
+    ToogleButton
+  },
   data () {
     return {
       module: 'dentists',

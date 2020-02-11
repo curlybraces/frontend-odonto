@@ -44,18 +44,20 @@
           </q-tr>
         </template>
       </q-table>
-      <q-card class="my-card">
-        <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/clinics/create" />
-      </q-card>
+      <ToogleButton :loading="loading" to="/patients/create"/>
     </div>
   </q-page>
 </template>
 
 <script>
 import transations from '../../utils/transations'
+import ToogleButton from 'components/ToogleButton'
 export default {
   name: 'PageIndexPatient',
   mixins: [transations],
+  components: {
+    ToogleButton
+  },
   filters: {
     holder: function (value) {
       if (!value) return 'No'

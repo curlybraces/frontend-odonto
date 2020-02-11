@@ -3,42 +3,32 @@
     <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el icon="home" to="/" />
-        <q-breadcrumbs-el to="/clinics" label="Clinics" />
-        <q-breadcrumbs-el v-if="register.id" label="Clinics Edit" />
-        <q-breadcrumbs-el v-else label="Clinics Create" />
+        <q-breadcrumbs-el to="/dentists-procedures" label="DentistProcedures" />
+        <q-breadcrumbs-el v-if="register.id" label="DentistProcedures Edit" />
+        <q-breadcrumbs-el v-else label="DentistProcedures Create" />
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
-        <q-input v-model="register.name" label="Name" :rules="[val => !!val || 'Field is required']"/>
-        <q-input v-model="register.localization" label="Localization" :rules="[val => !!val || 'Field is required']"/>
-        <q-input v-model="register.number" label="Number" />
-        <q-input v-model="register.complement" label="Complement" />
+        <q-select
+          filled
+          v-model="register.specialtie_id"
+          :options="specialties"
+          option-value="id"
+          option-label="name_specialty"
+          emit-value
+          map-options
+          label="Specialtie"
+        />
+        <q-input v-model="register.name_procedure" label="Name" :rules="[val => !!val || 'Field is required']"/>
         <template v-if="register.id">
-          <q-select
-            filled
-            v-model="dentistsMember"
-            multiple
-            :options="dentists"
-            option-value="id"
-            option-label="name"
-            map-options
-            use-chips
-            use-input
-            stack-label
-            label="Member dentists"
-            @add="updateDentist"
-            @remove="updateDentist"
-          />
-        </template>
-        <template v-if="register.id">
-          <q-btn :disable="requireds" color="green-6" class="full-width" label="Edit register" @click="edit">
+          <q-btn :disable="requireds" color="green-5" class="full-width" label="Edit register" @click="edit">
             <q-tooltip>
               {{msgRequired}}
             </q-tooltip>
           </q-btn>
         </template>
         <template v-else>
-          <q-btn color="green-6" :disable="requireds" class="full-width" label="Add register" @click="create">
+          <q-btn color="green-5" :disable="requireds" class="full-width" label="Add register" @click="create">
             <q-tooltip>
               {{msgRequired}}
             </q-tooltip>
@@ -51,35 +41,30 @@
 <script>
 import transations from '../../utils/transations'
 export default {
-  name: 'PageFormClinic',
+  name: 'PageFormDentistProcedure',
   mixins: [transations],
   data () {
     return {
-      module: 'clinics',
+      module: 'dentists-procedures',
       register: {},
-      dentists: [],
-      dentistsMember: []
+      specialties: []
     }
   },
   computed: {
     requireds() {
-      if (this.register.name && this.register.localization) return false
+      if (this.register.name_procedure && this.register.specialtie_id) return false
       return true
     },
     msgRequired() {
-        return 'to submit the fields NAME, LOCALIZATION must be completed'
+        return 'to submit the fields SPECIALTY, NAME must be completed'
     }
   },
   created () {
     const id = this.$router.currentRoute.params.id
-    if (id) this.datasToEdit(id)
+    if (id) this.getRegister(id)
+    this.getSpecialties()
   },
   methods: {
-    datasToEdit(id) {
-      this.getRegister(id)
-      this.membersDentists(id)
-      this.getDentists()
-    },
     async getRegister(id) {
       try {
         const response = await this.$axios.get(`/api/${this.module}/${id}`)
@@ -88,27 +73,10 @@ export default {
         console.error(e)
       }
     },
-    async getDentists() {
+    async getSpecialties() {
       try {
-        const response = await this.$axios.get(`/api/dentists`)
-        if (response) this.dentists = response.data
-      } catch (e) {
-        console.error(e)
-      }
-    },
-    async membersDentists(id) {
-      try {
-        const response = await this.$axios.get(`/api/${this.module}/${id}/dentists`)
-        if (response) this.dentistsMember = response.data
-      } catch (e) {
-        console.error(e)
-      }
-    },
-    async updateDentist() {
-      const id = this.register.id
-      try {
-        const response = await this.$axios.post(`/api/${this.module}/${id}/dentists`, this.dentistsMember)
-        this.transation('edit', response.data.success)
+        const response = await this.$axios.get(`/api/specialties`)
+        if (response) this.specialties = response.data
       } catch (e) {
         console.error(e)
       }
@@ -117,11 +85,7 @@ export default {
       try {
         const response = await this.$axios.post(`/api/${this.module}`, this.register)
         this.transation('create', response.data.success)
-        if (response) {
-          const id = response.data.obj.id
-          this.$router.push(`edit/${id}`)
-          this.datasToEdit(id)
-        }
+        if (response) this.$router.push(`/${this.module}`)
       } catch (e) {
         console.error(e)
         this.transation('create', false)

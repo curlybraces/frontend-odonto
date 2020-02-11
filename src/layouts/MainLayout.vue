@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header elevated class="bg-blue-5">
       <q-toolbar>
         <q-btn
           flat
@@ -15,7 +15,7 @@
           Odonto clinic
         </q-toolbar-title>
 
-        <div>Version 0.0.1</div>
+        <div>Version 0.1.1</div>
       </q-toolbar>
     </q-header>
 
@@ -25,24 +25,7 @@
       bordered
       content-class="bg-grey-1"
     >
-      <q-list>
-        <q-item-label header class="text-grey-8">Essential Links</q-item-label>
-        <q-item v-for="link in essentialLinks"
-          :key="link.title"
-          clickable
-          v-ripple
-          @click="active == link.title"
-          :active="link.title === active"
-          :to="link.link"
-          active-class="my-menu-link"
-        >
-          <q-item-section avatar>
-            <q-icon v-if="link.icon" :name="link.icon" />
-            <q-icon v-else :name="'img:statics/dentist-icons/icons/'+link.svg+'.svg'" />
-          </q-item-section>
-          <q-item-section>{{link.title}}</q-item-section>
-        </q-item>
-      </q-list>
+      <SideMenu :links="links"/>
     </q-drawer>
 
     <q-page-container>
@@ -52,43 +35,24 @@
 </template>
 
 <script>
-// import EssentialLink from 'components/EssentialLink'
+import SideMenu from 'components/SideMenu'
 
 export default {
   name: 'MainLayout',
 
-  // components: {
-  //   EssentialLink
-  // },
+  components: {
+    SideMenu
+  },
 
   data () {
     return {
       leftDrawerOpen: false,
-      active: '',
-      essentialLinks: [
-        {
-          title: 'Clinics',
-          caption: '',
-          svg: 'dentist-chair',
-          link: '/clinics/'
-        },
+      links: [
         {
           title: 'Consults',
           caption: '',
           svg: 'tooth-inspect',
           link: '/consults/'
-        },
-        {
-          title: 'Dentists',
-          caption: '',
-          svg: 'dentist',
-          link: '/dentists/'
-        },
-        {
-          title: 'Patients',
-          caption: '',
-          svg: 'tooth-add',
-          link: '/patients/'
         },
         {
           title: 'Procedures Performed',
@@ -97,16 +61,34 @@ export default {
           link: '/procedures-performeds/'
         },
         {
-          title: 'Dentists Procedures',
+          title: 'Clinics',
           caption: '',
-          svg: 'dental-care',
-          link: '/dentists-procedures/'
+          svg: 'dentist-chair',
+          link: '/clinics/'
+        },
+        {
+          title: 'Patients',
+          caption: '',
+          svg: 'tooth-add',
+          link: '/patients/'
+        },
+        {
+          title: 'Dentists',
+          caption: '',
+          svg: 'dentist',
+          link: '/dentists/'
         },
         {
           title: 'Specialties',
           caption: '',
-          svg: 'toothbrush',
+          svg: 'tooth-pliers',
           link: '/specialties/'
+        },
+        {
+          title: 'Dentists Procedures',
+          caption: '',
+          svg: 'dental-care',
+          link: '/dentists-procedures/'
         }
       ]
     }

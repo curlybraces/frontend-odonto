@@ -31,14 +31,14 @@
           />
         </template>
         <template v-if="register.id">
-          <q-btn :disable="requireds" color="green-6" class="full-width" label="Edit register" @click="edit">
+          <q-btn :disable="requireds" color="green-5" class="full-width" label="Edit register" @click="edit">
             <q-tooltip>
               {{msgRequired}}
             </q-tooltip>
           </q-btn>
         </template>
         <template v-else>
-          <q-btn color="green-6" :disable="requireds" class="full-width" label="Add register" @click="create">
+          <q-btn color="green-5" :disable="requireds" class="full-width" label="Add register" @click="create">
             <q-tooltip>
               {{msgRequired}}
             </q-tooltip>

@@ -14,6 +14,21 @@
       <template v-if="register.id">
         <q-select
           filled
+          v-model="specialtiesMember"
+          multiple
+          :options="specialties"
+          option-value="id"
+          option-label="name_specialty"
+          map-options
+          use-chips
+          use-input
+          stack-label
+          label="Dentist specialties"
+          @add="updateSpecialties"
+          @remove="updateSpecialties"
+        />
+        <q-select
+          filled
           v-model="clinicsMember"
           multiple
           :options="clinics"
@@ -29,14 +44,14 @@
         />
       </template>
       <template v-if="register.id">
-        <q-btn :disable="requireds" color="green-6" class="full-width" label="Edit register" @click="edit">
+        <q-btn :disable="requireds" color="green-5" class="full-width" label="Edit register" @click="edit">
           <q-tooltip>
             {{msgRequired}}
           </q-tooltip>
         </q-btn>
       </template>
       <template v-else>
-        <q-btn color="green-6" :disable="requireds" class="full-width" label="Add register" @click="create">
+        <q-btn color="green-5" :disable="requireds" class="full-width" label="Add register" @click="create">
           <q-tooltip>
             {{msgRequired}}
           </q-tooltip>
@@ -62,7 +77,9 @@ export default {
       module: 'dentists',
       register: {},
       clinics: [],
-      clinicsMember: []
+      clinicsMember: [],
+      specialties: [],
+      specialtiesMember: []
     }
   },
   computed: {
@@ -83,6 +100,7 @@ export default {
       this.getRegister(id)
       this.membersClinics(id)
       this.getClinics()
+      this.getSpecialties()
     },
     async getRegister(id) {
       try {
@@ -92,6 +110,7 @@ export default {
         console.error(e)
       }
     },
+    // turn in component
     async getClinics() {
       try {
         const response = await this.$axios.get(`/api/clinics`)
@@ -112,6 +131,32 @@ export default {
       const id = this.register.id
       try {
         const response = await this.$axios.post(`/api/${this.module}/${id}/clinics`, this.clinicsMember)
+        this.transation('edit', response.data.success)
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    // turn in component
+    async getSpecialties() {
+      try {
+        const response = await this.$axios.get(`/api/specialties`)
+        if (response) this.specialties = response.data
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async membersSpecialties(id) {
+      try {
+        const response = await this.$axios.get(`/api/${this.module}/${id}/specialties`)
+        if (response) this.SpecialtiesMember = response.data
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async updateSpecialties() {
+      const id = this.register.id
+      try {
+        const response = await this.$axios.post(`/api/${this.module}/${id}/specialties`, this.specialtiesMember)
         this.transation('edit', response.data.success)
       } catch (e) {
         console.error(e)

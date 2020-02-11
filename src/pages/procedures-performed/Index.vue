@@ -3,12 +3,12 @@
     <div class="q-pa-md q-gutter-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el icon="home" to="/" />
-        <q-breadcrumbs-el label="Clinics" />
+        <q-breadcrumbs-el label="ProceduresPerformeds" />
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
         <q-table
-          title="Clinics"
+          title="ProceduresPerformeds"
           :data="registers"
           :columns="columns"
           row-key="id"
@@ -30,21 +30,23 @@
             </q-td>
         </template>
         </q-table>
-      <q-card class="my-card">
-        <q-btn color="primary" class="full-width" :disable="loading" label="Add register" to="/clinics/create" />
-      </q-card>
+        <ToogleButton :loading="loading" to="/procedures-performeds/create"/>
     </div>
   </q-page>
 </template>
 
 <script>
 import transations from '../../utils/transations'
+import ToogleButton from 'components/ToogleButton'
 export default {
-  name: 'PageIndexClinic',
+  name: 'PageIndexProceduresPerformed',
   mixins: [transations],
+  components: {
+    ToogleButton
+  },
   data () {
     return {
-      module: 'clinics',
+      module: 'procedures-performeds',
       loading: false,
       filter: '',
       rowCount: 10,

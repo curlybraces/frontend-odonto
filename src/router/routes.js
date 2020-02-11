@@ -9,11 +9,17 @@ const routes = [
   },
   {
     path: '/login',
-    component: () => import('pages/auth/Login.vue')
+    component: () => import('layouts/OutSistem.vue'),
+    children: [
+      { path: '', component: () => import('pages/auth/Login.vue') }
+    ]
   },
   {
     path: '/register',
-    component: () => import('pages/auth/Register.vue')
+    component: () => import('layouts/OutSistem.vue'),
+    children: [
+      { path: '', component: () => import('pages/auth/Register.vue') }
+    ]
   },
   {
     path: '/clinics/',
@@ -86,14 +92,14 @@ const routes = [
     ]
   },
   {
-    path: '/dentist-procedures/create',
+    path: '/dentists-procedures/create',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/dentists-procedure/Form.vue') }
     ]
   },
   {
-    path: '/dentist-procedures/edit/:id',
+    path: '/dentists-procedures/edit/:id',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/dentists-procedure/Form.vue') }
