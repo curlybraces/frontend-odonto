@@ -7,104 +7,85 @@
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
-        <q-table
-          title="Consults"
-          :data="registers"
-          :columns="columns"
-          row-key="id"
-          :filter="filter"
-          :loading="loading"
-          >
-          <template v-slot:top>
-            <q-space />
-            <q-input borderless dense debounce="300" color="primary" v-model="filter">
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </template>
-          <template v-slot:body-cell-actions="props">
-            <q-td :props="props">
-              <q-btn dense round flat color="grey" @click="editRow(props.row)" icon="edit"></q-btn>
-              <q-btn dense round flat color="grey" @click="deleteRow(props.row)" icon="delete"></q-btn>
-            </q-td>
-        </template>
-        </q-table>
-        <ToogleButton :loading="loading" to="/consults/create"/>
+      <div>
+        <SearchConsult @searched="toogleSearch"/>
+        <div class="q-gutter-md row items-start" v-if="searched">
+          <q-date
+            v-model="register.day"
+            mask="YYYY-MM-DD"
+            color="blue-5"
+            today-btn
+            landscape
+            :options="optionsFn"
+          />
+          <q-time
+            v-model="register.hour"
+            mask="HH:mm"
+            color="blue-5"
+            now-btn
+            landscape
+            :hour-options="hourOptions"
+            :minute-options="minuteOptions"
+            format24h
+          />
+        </div>
+        <q-btn color="blue-5" class="full-width" :disable="!searched" label="Create" @click="toogleSearch"/>
+      </div>
     </div>
+    {{register}}
   </q-page>
 </template>
 
 <script>
 import transations from '../../utils/transations'
-import ToogleButton from 'components/ToogleButton'
+import functions from '../../utils/functions'
+import SearchConsult from 'components/SearchConsult'
+import { date } from 'quasar'
+
 export default {
   name: 'PageIndexConsult',
-  mixins: [transations],
+  mixins: [transations, functions],
   components: {
-    ToogleButton
+    SearchConsult
   },
   data () {
     return {
       module: 'consults',
-      loading: false,
-      filter: '',
-      rowCount: 10,
-      columns: [
-        {
-          name: 'localization',
-          required: true,
-          label: 'Localization',
-          align: 'left',
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        { name: 'name', label: 'Name', field: 'name' },
-        { name: 'number', label: 'Number', field: 'number' },
-        { name: 'complement', label: 'Complement', field: 'complement' },
-        { name: 'actions', label: 'Actions', field: 'actions' }
-      ],
+      searched: false,
+      loading: true,
+      register: {},
+      hourOptions: [ 9, 10, 11, 13, 15 ],
+      minuteOptions: [ 0 ],
       registers: []
     }
   },
+  computed: {
+    consults: {
+        get () {
+            return this.$store.state.consult.consults
+        },
+        set (val) {
+            this.$store.commit('consult/updateConsults', val)
+        }
+    }
+  },
   created () {
-    this.loadData()
+    this.baseRegister()
+    this.stored = this.$store.state.consult
   },
   methods: {
-    editRow (row) {
-      this.$router.push(`/${this.module}/edit/${row.id}`)
+    baseRegister () {
+      this.register.clinic_id = this.$store.state.consult.clinic.id
+      this.register.dentist_id = this.$store.state.consult.dentist.id
     },
-    async deleteRow (row) {
-      try {
-        const response = await this.$axios.delete(`/api/${this.module}/${row.id}`)
-        this.transation('delete', response.data.success)
-        this.loadData()
-      } catch (e) {
-        console.error(e)
-        this.$q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Loading failed',
-          icon: 'report_problem'
-        })
-      }
+    toogleSearch () {
+      this.searched = !this.searched
     },
-    async loadData () {
-      this.loading = true
-      try {
-        const response = await this.$axios.get(`/api/${this.module}`)
-        this.registers = response.data
-      } catch (e) {
-        console.error(e)
-        this.$q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Loading failed',
-          icon: 'report_problem'
-        })
-      }
-      this.loading = false
+    optionsFn (d) {
+      return d >= date.formatDate(Date.now(), 'YYYY/MM/DD')
+    },
+    changeDate (value, reason, details) {
+      console.log(details)
     }
   }
 }

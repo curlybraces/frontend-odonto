@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// import example from './module-example'
+import consult from './consult'
 
 Vue.use(Vuex)
 
@@ -17,7 +17,7 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
+      consult
     },
 
     // enable strict mode (adds overhead!)
@@ -25,5 +25,9 @@ export default function (/* { ssrContext } */) {
     strict: process.env.DEV
   })
 
+  module.hot.accept(['./consult'], () => {
+    const newConsult = require('./consult').default
+    Store.hotUpdate({ modules: { consult: newConsult } })
+  })
   return Store
 }

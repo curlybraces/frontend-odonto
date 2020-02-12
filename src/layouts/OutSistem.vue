@@ -2,7 +2,7 @@
   <div class="window-height window-width row justify-center items-center" id="login">
     <div class="column">
       <div class="row">
-        <h5 class="text-h5 text-white q-my-md">Odonto Clinic</h5>
+        <h4 class="text-h4 q-my-md">Odonto Clinic</h4>
       </div>
       <div class="row">
         <q-card square bordered class="q-pa-lg shadow-1" id="card-login">
