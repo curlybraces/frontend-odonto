@@ -51,11 +51,9 @@
 </template>
 
 <script>
-import transations from '../../utils/transations'
 import Phone from 'components/Phone'
 export default {
   name: 'PageFormClinic',
-  mixins: [transations],
   components: {
     Phone
   },
@@ -136,11 +134,9 @@ export default {
     async edit (props) {
       try {
         const response = await this.$axios.put(`/api/${this.module}/${this.register.id}`, this.register)
-        this.transation('edit', response.data.success)
         if (response) this.$router.push(`/${this.module}`)
       } catch (e) {
         console.error(e)
-        this.transation('edit', false)
       }
     }
   }

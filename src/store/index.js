@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import consult from './consult'
+import users from './users'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,8 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      consult
+      consult,
+      users
     },
 
     // enable strict mode (adds overhead!)
@@ -28,6 +30,10 @@ export default function (/* { ssrContext } */) {
   module.hot.accept(['./consult'], () => {
     const newConsult = require('./consult').default
     Store.hotUpdate({ modules: { consult: newConsult } })
+  })
+  module.hot.accept(['./users'], () => {
+    const newUsers = require('./users').default
+    Store.hotUpdate({ modules: { users: newUsers } })
   })
   return Store
 }

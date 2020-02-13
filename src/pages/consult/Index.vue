@@ -37,14 +37,13 @@
 </template>
 
 <script>
-import transations from '../../utils/transations'
 import functions from '../../utils/functions'
 import SearchConsult from 'components/SearchConsult'
 import { date } from 'quasar'
 
 export default {
   name: 'PageIndexConsult',
-  mixins: [transations, functions],
+  mixins: [functions],
   components: {
     SearchConsult
   },

@@ -39,10 +39,8 @@
 </template>
 
 <script>
-import transations from '../../utils/transations'
 export default {
   name: 'PageFormDentistProcedure',
-  mixins: [transations],
   data () {
     return {
       module: 'dentists-procedures',
@@ -84,21 +82,17 @@ export default {
     async create () {
       try {
         const response = await this.$axios.post(`/api/${this.module}`, this.register)
-        this.transation('create', response.data.success)
         if (response) this.$router.push(`/${this.module}`)
       } catch (e) {
         console.error(e)
-        this.transation('create', false)
       }
     },
     async edit (props) {
       try {
         const response = await this.$axios.put(`/api/${this.module}/${this.register.id}`, this.register)
-        this.transation('edit', response.data.success)
         if (response) this.$router.push(`/${this.module}`)
       } catch (e) {
         console.error(e)
-        this.transation('edit', false)
       }
     }
   }

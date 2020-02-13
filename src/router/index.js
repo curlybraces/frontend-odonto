@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { SessionStorage } from 'quasar'
 
 import routes from './routes'
 
@@ -24,6 +25,16 @@ export default function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
+  })
+  Router.beforeEach((to, from, next) => {
+    // redirect to login page if not logged in and trying to access a restricted page
+    const publicPages = ['/login']
+    const authRequired = !publicPages.includes(to.path)
+    const loggedIn = SessionStorage.getItem('user')
+    if (authRequired && !loggedIn) {
+      return next('/login')
+    }
+    next()
   })
 
   return Router

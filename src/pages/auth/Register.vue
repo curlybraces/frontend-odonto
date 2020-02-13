@@ -23,12 +23,6 @@ export default {
         console.log(response.data)
       } catch (e) {
         console.error(e)
-        this.$q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Not Works',
-          icon: 'report_problem'
-        })
       }
     }
   }

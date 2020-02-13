@@ -45,12 +45,10 @@
 </template>
 
 <script>
-import transations from '../../utils/transations'
 import Phone from 'components/Phone'
 
 export default {
   name: 'PageFormClinic',
-  mixins: [transations],
   components: {
     Phone
   },
@@ -100,7 +98,6 @@ export default {
     async create () {
       try {
         const response = await this.$axios.post(`/api/${this.module}`, this.register)
-        this.transation('create', response.data.success)
         if (response) {
           const id = response.data.obj.id
           this.$router.push(`edit/${id}`)
@@ -108,17 +105,14 @@ export default {
         }
       } catch (e) {
         console.error(e)
-        this.transation('create', false)
       }
     },
     async edit (props) {
       try {
         const response = await this.$axios.put(`/api/${this.module}/${this.register.id}`, this.register)
-        this.transation('edit', response.data.success)
         if (response) this.$router.push(`/${this.module}`)
       } catch (e) {
         console.error(e)
-        this.transation('edit', false)
       }
     }
   }

@@ -72,10 +72,8 @@
 </template>
 
 <script>
-import transations from './../utils/transations'
 export default {
   name: 'ClinicPhone',
-  mixins: [transations],
   props: {
     id_register: { type: Number },
     module: { type: String }
@@ -115,12 +113,10 @@ export default {
     async create () {
       try {
         const response = await this.$axios.post(`/api/${this.module}/${this.id_register}/phones`, this.register)
-        this.transation('create', response.data.success)
-        this.loadPhones(this.id_register)
+        if (response) this.loadPhones(this.id_register)
         this.register = {}
       } catch (e) {
         console.error(e)
-        this.transation('create', false)
       }
     },
     cancelRow () {
@@ -134,21 +130,17 @@ export default {
     async update (props) {
       try {
         const response = await this.$axios.put(`/api/${this.module}/${this.id_register}/phones/${this.register.id}`, this.register)
-        this.transation('edit', response.data.success)
-        this.loadPhones(this.id_register)
+        if (response) this.loadPhones(this.id_register)
       } catch (e) {
         console.error(e)
-        this.transation('edit', false)
       }
     },
     async deleteRow (row) {
       try {
         const response = await this.$axios.delete(`/api/${this.module}/${this.id_register}/phones/${row.id}`)
-        this.transation('delete', response.data.success)
-        this.loadPhones(this.id_register)
+        if (response) this.loadPhones(this.id_register)
       } catch (e) {
         console.error(e)
-        this.transation('delete', false)
       }
     }
   }

@@ -64,11 +64,9 @@
 </template>
 
 <script>
-import transations from '../../utils/transations'
 import Phone from 'components/Phone'
 export default {
   name: 'PageFormClinic',
-  mixins: [transations],
   components: {
     Phone
   },
@@ -130,8 +128,7 @@ export default {
     async updateClinic() {
       const id = this.register.id
       try {
-        const response = await this.$axios.post(`/api/${this.module}/${id}/clinics`, this.clinicsMember)
-        this.transation('edit', response.data.success)
+        await this.$axios.post(`/api/${this.module}/${id}/clinics`, this.clinicsMember)
       } catch (e) {
         console.error(e)
       }
@@ -156,8 +153,7 @@ export default {
     async updateSpecialties() {
       const id = this.register.id
       try {
-        const response = await this.$axios.post(`/api/${this.module}/${id}/specialties`, this.specialtiesMember)
-        this.transation('edit', response.data.success)
+        await this.$axios.post(`/api/${this.module}/${id}/specialties`, this.specialtiesMember)
       } catch (e) {
         console.error(e)
       }
@@ -165,7 +161,6 @@ export default {
     async create () {
       try {
         const response = await this.$axios.post(`/api/${this.module}`, this.register)
-        this.transation('create', response.data.success)
         if (response) {
           const id = response.data.obj.id
           this.$router.push(`edit/${id}`)
@@ -173,17 +168,14 @@ export default {
         }
       } catch (e) {
         console.error(e)
-        this.transation('create', false)
       }
     },
     async edit (props) {
       try {
         const response = await this.$axios.put(`/api/${this.module}/${this.register.id}`, this.register)
-        this.transation('edit', response.data.success)
         if (response) this.$router.push(`/${this.module}`)
       } catch (e) {
         console.error(e)
-        this.transation('edit', false)
       }
     }
   }

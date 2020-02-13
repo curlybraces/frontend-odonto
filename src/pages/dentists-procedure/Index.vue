@@ -36,11 +36,9 @@
 </template>
 
 <script>
-import transations from '../../utils/transations'
 import ToogleButton from 'components/ToogleButton'
 export default {
   name: 'PageIndexDentistProcedures',
-  mixins: [transations],
   components: {
     ToogleButton
   },
@@ -75,16 +73,9 @@ export default {
     async deleteRow (row) {
       try {
         const response = await this.$axios.delete(`/api/${this.module}/${row.id}`)
-        this.transation('delete', response.data.success)
-        this.loadData()
+        if (response) this.loadData()
       } catch (e) {
         console.error(e)
-        this.$q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Loading failed',
-          icon: 'report_problem'
-        })
       }
     },
     async loadData () {
@@ -94,12 +85,6 @@ export default {
         this.registers = response.data
       } catch (e) {
         console.error(e)
-        this.$q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Loading failed',
-          icon: 'report_problem'
-        })
       }
       this.loading = false
     }

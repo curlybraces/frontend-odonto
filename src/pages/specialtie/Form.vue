@@ -31,10 +31,8 @@
 </template>
 
 <script>
-import transations from '../../utils/transations'
 export default {
   name: 'PageFormSpecialtie',
-  mixins: [transations],
   data () {
     return {
       module: 'specialties',
@@ -66,21 +64,17 @@ export default {
     async create () {
       try {
         const response = await this.$axios.post(`/api/${this.module}`, this.register)
-        this.transation('create', response.data.success)
         if (response) this.$router.push(`/${this.module}`)
       } catch (e) {
         console.error(e)
-        // this.transation('error', true, 'The name specialty has already been taken')
       }
     },
     async edit (props) {
       try {
         const response = await this.$axios.put(`/api/${this.module}/${this.register.id}`, this.register)
-        this.transation('edit', response.data.success)
         if (response) this.$router.push(`/${this.module}`)
       } catch (e) {
         console.error(e)
-        this.transation('edit', false)
       }
     }
   }
