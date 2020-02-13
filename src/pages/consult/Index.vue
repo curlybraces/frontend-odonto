@@ -8,8 +8,29 @@
     </div>
     <div class="q-pa-md">
       <div>
-        <SearchConsult @searched="toogleSearch"/>
-        <div class="q-gutter-md row items-start" v-if="searched">
+        <q-select
+            filled
+            v-model="register.clinic_id"
+            :options="clinics"
+            option-value="id"
+            option-label="name"
+            map-options
+            emit-value
+            label="Clinic"
+        />
+        <q-select
+            v-if="register.clinic_id"
+            filled
+            :key="register.clinic_id"
+            v-model="register.dentist_id"
+            :options="dentists"
+            option-value="id"
+            option-label="name"
+            map-options
+            emit-value
+            label="Dentist"
+        />
+        <div class="q-gutter-md row items-start" v-if="register.dentist_id">
           <q-date
             v-model="register.day"
             mask="YYYY-MM-DD"
@@ -29,7 +50,7 @@
             format24h
           />
         </div>
-        <q-btn color="blue-5" class="full-width" :disable="!searched" label="Create" @click="toogleSearch"/>
+        <q-btn color="blue-5" class="full-width" :disable="loading" label="Create" />
       </div>
     </div>
     {{register}}
@@ -38,19 +59,17 @@
 
 <script>
 import functions from '../../utils/functions'
-import SearchConsult from 'components/SearchConsult'
 import { date } from 'quasar'
 
 export default {
   name: 'PageIndexConsult',
   mixins: [functions],
-  components: {
-    SearchConsult
-  },
   data () {
     return {
       module: 'consults',
-      searched: false,
+      dentists: [],
+      clinics: [],
+      consults: [],
       loading: true,
       register: {},
       hourOptions: [ 9, 10, 11, 13, 15 ],
@@ -58,27 +77,51 @@ export default {
       registers: []
     }
   },
-  computed: {
-    consults: {
-        get () {
-            return this.$store.state.consult.consults
+  watch: {
+    'register.clinic_id': {
+        handler: function (after, before) {
+          this.getDentists(after)
         },
-        set (val) {
-            this.$store.commit('consult/updateConsults', val)
-        }
+        deep: true
+    }
+  },
+  computed: {
+    hasClinic () {
+        return Object.keys(this.clinic).length
+    },
+    hasDentist () {
+        return Object.keys(this.dentist).length
     }
   },
   created () {
-    this.baseRegister()
-    this.stored = this.$store.state.consult
+    this.getClinics()
+     let session = this.$q.sessionStorage.getItem('user')
+     this.register.user_id = session.user.id
   },
   methods: {
-    baseRegister () {
-      this.register.clinic_id = this.$store.state.consult.clinic.id
-      this.register.dentist_id = this.$store.state.consult.dentist.id
+    async getClinics() {
+    try {
+        const response = await this.$axios.get(`/api/clinics`)
+        if (response) this.clinics = response.data
+    } catch (e) {
+        console.error(e)
+    }
     },
-    toogleSearch () {
-      this.searched = !this.searched
+    async getDentists(val) {
+      try {
+        const response = await this.$axios.get(`/api/clinics/${val}/dentists`)
+        if (response) this.dentists = response.data
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async getConsults () {
+      try {
+        const response = await this.$axios.post(`/api/${this.module}`, this.register)
+        if (response) this.consults = response.data
+      } catch (e) {
+        console.error(e)
+      }
     },
     optionsFn (d) {
       return d >= date.formatDate(Date.now(), 'YYYY/MM/DD')
