@@ -7,127 +7,88 @@
       </q-breadcrumbs>
     </div>
     <div class="q-pa-md">
-      <div>
-        <q-select
-            filled
-            v-model="register.clinic_id"
-            :options="clinics"
-            option-value="id"
-            option-label="name"
-            map-options
-            emit-value
-            label="Clinic"
-        />
-        <q-select
-            v-if="register.clinic_id"
-            filled
-            :key="register.clinic_id"
-            v-model="register.dentist_id"
-            :options="dentists"
-            option-value="id"
-            option-label="name"
-            map-options
-            emit-value
-            label="Dentist"
-        />
-        <div class="q-gutter-md row items-start" v-if="register.dentist_id">
-          <q-date
-            v-model="register.day"
-            mask="YYYY-MM-DD"
-            color="blue-5"
-            today-btn
-            landscape
-            :options="optionsFn"
-          />
-          <q-time
-            v-model="register.hour"
-            mask="HH:mm"
-            color="blue-5"
-            now-btn
-            landscape
-            :hour-options="hourOptions"
-            :minute-options="minuteOptions"
-            format24h
-          />
-        </div>
-        <q-btn color="blue-5" class="full-width" :disable="loading" label="Create" />
-      </div>
+        <q-table
+          title="Consults"
+          :data="registers"
+          :columns="columns"
+          row-key="id"
+          :filter="filter"
+          :loading="loading"
+          >
+          <template v-slot:top>
+            <q-space />
+            <q-input borderless dense debounce="300" color="primary" v-model="filter">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+          <template v-slot:body-cell-actions="props">
+            <q-td :props="props">
+              <q-btn dense round flat color="grey" @click="editRow(props.row)" icon="edit"></q-btn>
+              <q-btn dense round flat color="grey" @click="deleteRow(props.row)" icon="delete"></q-btn>
+            </q-td>
+        </template>
+        </q-table>
+        <ToogleButton :loading="loading" to="/consults/create"/>
     </div>
-    {{register}}
   </q-page>
 </template>
 
 <script>
-import functions from '../../utils/functions'
-import { date } from 'quasar'
-
+import ToogleButton from 'components/ToogleButton'
 export default {
   name: 'PageIndexConsult',
-  mixins: [functions],
+  components: {
+    ToogleButton
+  },
   data () {
     return {
       module: 'consults',
-      dentists: [],
-      clinics: [],
-      consults: [],
-      loading: true,
-      register: {},
-      hourOptions: [ 9, 10, 11, 13, 15 ],
-      minuteOptions: [ 0 ],
+      loading: false,
+      filter: '',
+      rowCount: 10,
+      columns: [
+        {
+          name: 'consult_date',
+          required: true,
+          label: 'Consult Date',
+          align: 'left',
+          field: row => row.consult_date,
+          format: val => `${val}`,
+          sortable: true
+        },
+        { name: 'consult_hour', label: 'Consult Hour', field: 'consult_hour' },
+        { name: 'name', label: 'Name', field: 'name' },
+        { name: 'actions', label: 'Actions', field: 'actions' }
+      ],
       registers: []
     }
   },
-  watch: {
-    'register.clinic_id': {
-        handler: function (after, before) {
-          this.getDentists(after)
-        },
-        deep: true
-    }
-  },
-  computed: {
-    hasClinic () {
-        return Object.keys(this.clinic).length
-    },
-    hasDentist () {
-        return Object.keys(this.dentist).length
-    }
-  },
   created () {
-    this.getClinics()
-     let session = this.$q.sessionStorage.getItem('user')
-     this.register.user_id = session.user.id
+    this.loadData()
   },
   methods: {
-    async getClinics() {
-    try {
-        const response = await this.$axios.get(`/api/clinics`)
-        if (response) this.clinics = response.data
-    } catch (e) {
-        console.error(e)
-    }
+    editRow (row) {
+      this.$router.push(`/${this.module}/edit/${row.id}`)
     },
-    async getDentists(val) {
+    async deleteRow (row) {
       try {
-        const response = await this.$axios.get(`/api/clinics/${val}/dentists`)
-        if (response) this.dentists = response.data
+        await this.$axios.delete(`/api/${this.module}/${row.id}`)
+        this.loadData()
       } catch (e) {
         console.error(e)
       }
     },
-    async getConsults () {
+    async loadData () {
+      this.loading = true
       try {
-        const response = await this.$axios.post(`/api/${this.module}`, this.register)
-        if (response) this.consults = response.data
+        const response = await this.$axios.get(`/api/${this.module}`)
+        this.registers = response.data
       } catch (e) {
         console.error(e)
       }
-    },
-    optionsFn (d) {
-      return d >= date.formatDate(Date.now(), 'YYYY/MM/DD')
-    },
-    changeDate (value, reason, details) {
-      console.log(details)
+      this.loading = false
     }
   }
 }

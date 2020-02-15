@@ -92,7 +92,6 @@ export default {
         this.$emit('searched', true)
       } catch (e) {
         console.error(e)
-        // this.transation('error', false, 'Not searched')
       }
     }
   }
