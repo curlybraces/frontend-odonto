@@ -38,6 +38,7 @@
               {{ props.row.is_holder | holder }}
             </q-td>
             <q-td key="actions" :props="props">
+              <q-btn dense round flat color="grey" @click="toOdontogram(props.row)" icon="img:statics/dentist-icons/icons/mouth.svg"></q-btn>
               <q-btn dense round flat color="grey" @click="editRow(props.row)" icon="edit"></q-btn>
               <q-btn dense round flat color="grey" @click="deleteRow(props.row)" icon="delete"></q-btn>
             </q-td>
@@ -90,6 +91,9 @@ export default {
     this.loadData()
   },
   methods: {
+    toOdontogram (row) {
+      this.$router.push(`/${this.module}/odontogram/${row.id}`)
+    },
     editRow (row) {
       this.$router.push(`/${this.module}/edit/${row.id}`)
     },

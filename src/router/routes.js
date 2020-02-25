@@ -127,6 +127,13 @@ const routes = [
     ]
   },
   {
+    path: '/patients/odontogram/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/patient/Odontogram.vue') }
+    ]
+  },
+  {
     path: '/procedures-performeds/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
