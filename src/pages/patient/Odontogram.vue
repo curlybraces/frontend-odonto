@@ -562,7 +562,7 @@
               </q-item>
             </template>
           </q-select>
-          <q-select
+          <!-- <q-select
             v-if="!specialtie"
             v-model="register.specialtie_id"
             :options="specialties"
@@ -572,7 +572,7 @@
             option-label="name_specialty"
             map-options
             @input="selectedSpecialty"
-          />
+          /> -->
           <q-select
             v-model="register.procedure_id"
             :options="procedures"
@@ -596,6 +596,7 @@
             return {
               module: 'patients',
               register: {},
+              odontogram: {},
               consult: null,
               specialtie: null,
               consults: [],
@@ -611,6 +612,14 @@
           this.specialtie = this.$route.query.specialtie
         },
         methods: {
+          async getOdontogram (id) {
+            try {
+              const response = await this.$axios.get(`/api/${this.module}/${id}/odontogram`)
+              if (response.data) this.odontogram = response.data
+            } catch (e) {
+              console.error(e)
+            }
+          },
           async getConsults (id) {
             try {
               const response = await this.$axios.get(`/api/${this.module}/${id}/consults`)
@@ -619,24 +628,16 @@
               console.error(e)
             }
           },
-          async getDentistSpecialities (id) {
-            try {
-              const response = await this.$axios.get(`/api/dentists/${id}/specialties`)
-              if (response.data) this.specialties = response.data
-            } catch (e) {
-              console.error(e)
-            }
-          },
           async getDentistProcedures (id) {
             try {
-              const response = await this.$axios.get(`/api/specialties/${id}/procedures`)
+              const response = await this.$axios.get(`/api/dentists/${id}/procedures`)
               if (response.data) this.procedures = response.data
             } catch (e) {
               console.error(e)
             }
           },
           selectedClinic (value) {
-            this.getDentistSpecialities(value.dentist_id)
+            this.getDentistProcedures(value.dentist_id)
           },
           selectedSpecialty (value) {
             this.getDentistProcedures(value)
