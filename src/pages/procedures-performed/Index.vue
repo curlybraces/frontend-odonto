@@ -50,17 +50,17 @@ export default {
       rowCount: 10,
       columns: [
         {
-          name: 'localization',
+          name: 'name',
           required: true,
-          label: 'Localization',
+          label: 'name',
           align: 'left',
           field: row => row.name,
           format: val => `${val}`,
           sortable: true
         },
-        { name: 'name', label: 'Name', field: 'name' },
-        { name: 'number', label: 'Number', field: 'number' },
-        { name: 'complement', label: 'Complement', field: 'complement' },
+        { name: 'tooth_number', label: 'Tooth number', field: 'tooth_number' },
+        { name: 'tooth_part', label: 'Tooth part', field: 'tooth_part' },
+        { name: 'name_procedure', label: 'Procedure', field: 'name_procedure' },
         { name: 'actions', label: 'Actions', field: 'actions' }
       ],
       registers: []

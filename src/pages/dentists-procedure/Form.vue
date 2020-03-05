@@ -20,6 +20,7 @@
           label="Specialtie"
         />
         <q-input v-model="register.name_procedure" label="Name" :rules="[val => !!val || 'Field is required']"/>
+        <q-color v-model="register.color" class="my-picker" />
         <template v-if="register.id">
           <q-btn :disable="requireds" color="green-5" class="full-width" label="Edit register" @click="edit">
             <q-tooltip>

@@ -631,6 +631,10 @@
             this.consult = this.$route.query.consult
             if (this.consult) this.register.consult_id = this.consult
           },
+          async cleanRegister () {
+            this.formModal = false
+            this.others = {}
+          },
           async getOdontogram () {
             try {
               const response = await this.$axios.get(`/api/${this.module}/${this.register.patient_id}/odontogram`)
@@ -639,7 +643,7 @@
             } catch (e) {
               console.error(e)
             }
-            this.formModal = false
+            this.cleanRegister()
           },
           async getConsults () {
             try {

@@ -2,11 +2,25 @@
 
 A Quasar Framework app
 
+## Main features
+### Login
+![](./presentation/login.gif)
+### Navegation
+![](./presentation/pages.gif)
+### Odontogram
+![](./presentation/odontogram.gif)
+### Add dentist
+![](./presentation/add-dentist.gif)
+### Consults
+![](./presentation/consults.gif)
+### Dentists procedures
+![](./presentation/dentist-procedure.gif)
 ### Prerequisites
 
 * [GIT](https://git-scm.com/)
 * [Docker](https://www.docker.com/)
 * [Docker Compose](https://github.com/docker/compose)
+
 
 ## Getting Started
 
